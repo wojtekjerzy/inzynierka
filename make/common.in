@@ -1,0 +1,70 @@
+cxx = g++
+
+cxx_flags = -g -Wall -std=c++11 -pipe -MMD
+
+rm = rm -f $1
+rmdir = rm -rf $1
+mkdir = mkdir -p $1
+kill = $(shell killall -g -I -s SIGTERM $1)
+
+# directories 
+interface_dir = $(project_dir)/interface
+interface_domain_dir = $(if $(domain_name),$(interface_dir)/$(domain_name),$(interface_dir))
+
+domain_dir = $(if $(domain_name),$(project_dir)/$(domain_name),)
+
+bin_dir = $(project_dir)/bin
+
+domain_bin_dir = $(bin_dir)/$(domain_name)
+
+build_dir = $(if $(domain_name),$(domain_bin_dir)/build,$(bin_dir)/build)
+objects_dir = $(if $(domain_name),$(domain_bin_dir)/objects,$(bin_dir)/objects)
+domain_src = $(if $(domain_name),$(project_dir)/$(domain_name)/src,)
+
+VPATH = $(domain_src) $(interface_domain_dir)
+
+MAKEFLAGS += --no-print-directory
+
+# functions
+recursive_wildcard = $(wildcard $1/$2) $(foreach file,$(wildcard $1/*),$(call recursive_wildcard,$(file),$2))
+recursive_directories = $(sort $(dir $(wildcard $1/$2/) $(foreach realdir,$(wildcard $1/*),$(call recursive_directories,$(realdir),$2))))
+remove_preffix = $(patsubst $1%,%,$2)
+remove_suffix = $(patsubst %$1,%,$2)
+get_objects_path = $(foreach object,$1,$(objects_dir)/$(object).o)
+get_objects = $(call remove_suffix,.cpp,$(call remove_preffix,$2/,$(call recursive_wildcard,$1,*.cpp)))
+
+# 3rdparty
+3rdparty_dir = ../$(project_dir)/3rdparty
+3rdparty_includes = $(3rdparty_dir)/gmock-1.7.0/include $(3rdparty_dir)/gmock-1.7.0/gtest/include
+3rdparty_libs = $(3rdparty_dir)/gmock-1.7.0/bin/libgmock.a  $(3rdparty_dir)/gmock-1.7.0/bin/gtest/libgtest.a
+
+
+# create includes
+interface_includes = $(patsubst %/,-I%,$(call recursive_directories,$(interface_domain_dir),*))
+boost_include = /home/boost_1_57_0
+
+boost_libs = -lboost_system -lboost_filesystem -lboost_thread -lboost_date_time -lboost_regex -pthread -lrt
+includes := $(patsubst %,-I%,$(interface_dir) $(interface_domain_dir) $(domain_src) $(3rdparty_includes)) $(interface_includes)
+
+#include help target
+include $(project_dir)/make/help.in
+
+# dependencies
+dependencies := $(call recursive_wildcard,$(domain_bin_dir),*.d) 
+
+-include $(dependencies)
+
+# phony targets
+phony = build_tests build run_tests clean
+
+.SUFFIXES: .h .cpp .o .hpp .so .a
+
+# targets
+build_and_run_tests: build_tests run_tests
+
+__prepare__:
+	@$(mkdir) $(bin_dir)
+	@$(mkdir) $(domain_bin_dir)
+	@$(mkdir) $(build_dir)
+	@$(mkdir) $(objects_dir)
+	@$(if $(domain_dir),$(mkdir) $(foreach sub_dirs,$(patsubst $(domain_dir)/%,%,$(call recursive_directories,$(domain_dir),*)),$(objects_dir)/$(sub_dirs)),)

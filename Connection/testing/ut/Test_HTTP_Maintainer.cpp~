@@ -1,0 +1,50 @@
+#include "Test_HTTP_Maintainer.h"
+#include "HTTP_Strings.h"
+#include "Const_Strings.h"
+
+TEST_F(Test_HTTP_Maintainer, http_with_empty_protocol__welcome_page_reutrned)
+{
+	std::string response = uut.parse_http_protocol_and_create_response(HTTP_Strings::http_get_empty_protocol);
+	EXPECT_EQ(Const_Strings::header_for_html + Const_Strings::welcome_page, response);
+}
+
+TEST_F(Test_HTTP_Maintainer, http_with_no_url_received__welcome_page_reutrned)
+{
+	std::string response = uut.parse_http_protocol_and_create_response(HTTP_Strings::http_get_empty);
+	EXPECT_EQ(Const_Strings::header_for_html + Const_Strings::welcome_page, response);
+}
+
+TEST_F(Test_HTTP_Maintainer, http_with_path_to_txt_file__response_is_returned)
+{
+	/*data_for_test.source = "data";
+	data_for_test.type_of_source = "txt";
+	data_for_test.is_available = true;
+	data_for_test.was_source_found = true;
+
+	EXPECT_CALL(*test_parameters, get_resources_path())
+			.WillOnce(testing::Return(HTTP_Strings::home_path));
+
+	EXPECT_CALL(*test_parameters, get_restricted_pattern())
+			.Times(1)
+			.WillOnce(testing::Return(""));
+
+	EXPECT_CALL(*test_access_protector, update(""))
+				.Times(1);
+
+	EXPECT_CALL(*test_access_protector, is_access_restricted(HTTP_Strings::url_no_1))
+				.Times(1)
+				.WillOnce(testing::Return(false));
+
+	EXPECT_CALL(*test_content_finder, get_resource(HTTP_Strings::home_path + HTTP_Strings::url_no_1))
+			.Times(1)
+			.WillOnce(testing::Return(data_for_test));
+
+	EXPECT_CALL(*test_script_manager, find_keyword("test_path.txt"))
+			.Times(1);
+
+	std::string response = uut.parse_http_protocol_and_create_response
+			(HTTP_Strings::http_get_with_url_no_1, test_parameters);
+
+	EXPECT_EQ(Const_Strings::header_for_html + "data", response);*/
+}
+

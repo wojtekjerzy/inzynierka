@@ -1,0 +1,49 @@
+ifndef project_dir
+$(error 'project_dir' variable not defined)
+endif
+
+domain_name := $(notdir $(CURDIR:%/=%))
+
+# includes
+include $(project_dir)/make/common.in
+
+testing_dir := $(project_dir)/$(domain_name)/testing
+common_testing_dir := $(project_dir)/testing
+
+build_sources = $(call get_objects,$(domain_src),$(domain_dir))
+common_testing_sources := $(call get_objects,$(common_testing_dir),$(project_dir))
+testing_sources := $(call get_objects,$(testing_dir),$(domain_dir)) $(common_testing_sources)
+
+testing_includes = $(patsubst %/,-I%,$(call recursive_directories,$(testing_dir),*) $(call recursive_directories,$(common_testing_dir),*))
+includes += $(testing_includes)
+
+# targets
+.PHONY: $(phony)
+
+build_tests: build $(call get_objects_path,$(testing_sources))
+	@echo "\033[0;34m[ BUILD    ]\033[0;39m" $(domain_name)_test
+	@$(cxx) $(cxx_flags) $(call get_objects_path,$(build_sources)) $(call get_objects_path,$(testing_sources)) $(includes) $(3rdparty_libs) $(boost_libs) -o $(build_dir)/ut_$(domain_name) 
+
+build: __prepare__ $(call get_objects_path,$(build_sources))
+
+run_tests:
+	@echo "\033[0;32m[ RUN      ]\033[0;39m" $(domain_name)_test
+	@$(build_dir)/ut_$(domain_name)
+
+$(objects_dir)/%.o: $(domain_dir)/%.cpp
+	@echo "\033[0;34m[ OBJECT   ]\033[0;39m" $@
+	@$(cxx) $(cxx_flags) -fPIC $(includes) -c $< -o $@ 
+
+clean:
+	@echo "\033[0;33m[ CLEAN    ]\033[0;39m" $(domain_name)
+#	@$(rm) $(patsubst %,$(objects_dir)/%,$(notdir $(build_sources:.cpp=.o) $(testing_sources:.cpp=.o)))
+#	@$(rm) $(patsubst %,$(objects_dir)/%,$(notdir $(build_sources:.cpp=.d) $(testing_sources:.cpp=.d)))
+	@$(rm) $(build_dir)/ut_$(domain_name)
+	@$(rmdir) $(build_dir)
+	@$(rmdir) $(objects_dir)
+	@$(rmdir) $(domain_bin_dir)
+	@$(if $(filter-out $(wildcard $(bin_dir)/$(domain_name)),$(wildcard $(bin_dir)/*)),,$(rmdir) $(bin_dir))
+
+clean_logs:
+	@echo "\033[0;33m[ CLEAN LOGS    ]\033[0;39m" $(domain_name)
+	@$(rmdir) ~/logs_DA

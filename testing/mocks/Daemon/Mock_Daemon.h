@@ -1,0 +1,16 @@
+#ifndef MOCK_DAEMON_H
+#define MOCK_DAEMON_H
+
+#include <Daemon/Base_Daemon_Interface.h>
+#include <gmock/gmock.h>
+
+class Mock_Daemon : public Base_Daemon_Interface
+{
+public:
+	~Mock_Daemon() throw() {}
+
+	MOCK_METHOD0(launch, EExitStatus());
+	MOCK_METHOD0(get_stop, const bool());
+};
+
+#endif

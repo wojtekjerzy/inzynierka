@@ -1,0 +1,25 @@
+#ifndef TEST_DAEMON_H
+#define TEST_DAEMON_H
+
+#include "Daemon.h"
+#include "Mock_System_Interface.h"
+
+#include <gtest/gtest.h>
+
+using ::testing::Return;
+using ::testing::AtLeast;
+using ::testing::NiceMock;
+
+class Test_Daemon : public ::testing::Test
+{
+protected:
+	Test_Daemon()
+		:uut(8080, test_interface)
+	{
+	}
+
+	std::shared_ptr <Mock_System_Interface> test_interface { std::make_shared <Mock_System_Interface> ()};
+	Daemon uut;
+};
+
+#endif

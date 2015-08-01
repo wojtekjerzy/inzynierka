@@ -1,0 +1,31 @@
+#ifndef ASIO_FOR_CONNECTION_H
+#define ASIO_FOR_CONNECTION_H
+
+#include "Base_Asio_For_Server_Interface.h" 
+#include "Base_Asio_For_Connection_Interface.h"
+#include "Base_Connection_Interface.h"
+
+#include <boost/array.hpp>
+
+class Asio_For_Connection : public Base_Asio_For_Connection_Interface
+{
+public:
+	Asio_For_Connection(std::shared_ptr <Base_Asio_For_Server_Interface> asio_for_serv_);
+	~Asio_For_Connection throw(){}
+
+	boost_socket::socket& get_socket() override;
+	std::string get_ip() override;
+	std::string get_port() override;
+	void read(boost::shared_ptr <Base_Connection_Interface> conn_ptr) override;
+	std::string convert_request_to_string(std::size_t bytes_transferred) override;
+	void write(boost::shared_ptr <Base_Connection_Interface> conn_ptr,
+					 const std::string& response) override;
+	void shutdown() override;	
+	void close() override;
+private:
+	boost_socket::socket socket;
+	boost::array<char, 512> buffer;
+};
+
+#endif
+

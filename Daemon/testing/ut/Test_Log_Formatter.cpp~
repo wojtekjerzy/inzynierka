@@ -1,0 +1,6 @@
+#include "Test_Log_Formatter.h"
+
+#include <boost/thread.hpp>
+#include <boost/ref.hpp>
+#include <sstream>
+

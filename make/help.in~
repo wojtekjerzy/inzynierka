@@ -1,0 +1,14 @@
+# PL: zaktualizowac helpa
+help:
+	@echo "Common Targets:"
+	@echo "help                  show help for make"
+	@echo "build                 build objects from cpp"
+	@echo "build_tests           built tests for concrete domain"
+	@echo "run_tests             run compiled tests"
+	@echo "run                   run compiled HTTP_server"
+	@echo "kill                  kill daemon HTTP_server"
+	@echo "build_and_run_tests   uses build_tests and run_tests together"
+	@echo "clean                 use clean to clean up project"
+	@echo "claean_logs           use clean_logs to clean up logs from home dircetory"
+
+

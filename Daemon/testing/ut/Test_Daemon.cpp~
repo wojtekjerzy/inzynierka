@@ -1,0 +1,84 @@
+#include "Test_Daemon.h"
+/*
+TEST_F(Test_Daemon, when_launch_is_called__then_expect_fork)
+{
+	EXPECT_CALL(*test_interface, fork())
+			.WillOnce(Return(100));
+
+	uut.launch();
+}
+
+TEST_F(Test_Daemon, when_child_pid_positive__then_expect_halt_status)
+{
+	EXPECT_CALL(*test_interface, fork())
+			.WillOnce(Return(100));
+
+	EXPECT_TRUE(uut.launch()==EExitStatus::EExitStatus_Halt);
+}
+
+TEST_F(Test_Daemon, when_child_pid_negative__then_expect_fail_status)
+{
+	EXPECT_CALL(*test_interface, fork())
+			.WillOnce(Return(-1));
+
+	EXPECT_TRUE(uut.launch()==EExitStatus::EExitStatus_Fail);
+}
+
+TEST_F(Test_Daemon, when_child_pid_is_zero_then_negative__then_expect_fail_status)
+{
+	EXPECT_CALL(*test_interface, fork())
+			.WillOnce(Return(0))
+			.WillOnce(Return(-1));
+
+	EXPECT_TRUE(uut.launch()==EExitStatus::EExitStatus_Fail);
+}
+
+TEST_F(Test_Daemon, when_child_pid_is_zero_then_positive__then_expect_halt_status)
+{
+	EXPECT_CALL(*test_interface, fork())
+			.WillOnce(Return(0))
+			.WillOnce(Return(100));
+
+	EXPECT_TRUE(uut.launch()==EExitStatus::EExitStatus_Halt);
+}
+
+TEST_F(Test_Daemon, when_child_pid_is_zero_twice__then_expect_remain_status)
+{
+	EXPECT_CALL(*test_interface, fork())
+			.WillOnce(Return(0))
+			.WillOnce(Return(0));
+
+	EXPECT_TRUE(uut.launch()==EExitStatus::EExitStatus_Remain);
+}
+
+TEST_F(Test_Daemon, when_launch_is_called__then_expect_sid)
+{
+	EXPECT_CALL(*test_interface, fork())
+			.WillOnce(Return(0));
+
+	EXPECT_CALL(*test_interface, setsid())
+			.WillOnce(Return(-10));
+
+	uut.launch();
+}
+
+TEST_F(Test_Daemon, when_Daemon_created__then_expect_stop_flag_to_be_false)
+{
+	EXPECT_FALSE(uut.get_stop());	
+}
+
+TEST_F(Test_Daemon, when_SIGTERM__then_stop_flag_is_true__and_rest_is_halted)
+{
+	Daemon dae;
+	EExitStatus status = dae.launch();
+	if (status == EExitStatus::EExitStatus_Remain){
+		raise(SIGTERM);
+		EXPECT_TRUE(dae.get_stop());
+	signal(SIGTERM, SIG_DFL);
+	signal(SIGCHLD, SIG_DFL);
+	signal(SIGHUP, SIG_DFL);
+	} else {
+		EXPECT_EQ(status, EExitStatus::EExitStatus_Halt);
+	}
+}
+*/

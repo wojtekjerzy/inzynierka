@@ -1,0 +1,24 @@
+#ifndef MOCK_ASIO_FOR_CONNECTION_H
+#define MOCK_ASIO_FOR_CONNECTION_H
+
+#include "Base_Asio_For_Connection_Interface.h"
+
+#include <gmock/gmock.h> 
+
+class Mock_Asio_For_Connection : public Base_Asio_For_Connection_Interface
+{
+public:
+	~Mock_Asio_For_Connection() throw() {}
+	MOCK_METHOD0(get_socket, boost_socket::socket&());
+	MOCK_METHOD0(get_ip, std::string());
+	MOCK_METHOD0(get_port, std::string());
+	MOCK_METHOD1(read, void(boost::shared_ptr <Base_Connection_Interface> conn_ptr));
+	MOCK_METHOD1(convert_request_to_string, std::string(std::size_t bytes_transferred));
+	MOCK_METHOD2(write, void(boost::shared_ptr <Base_Connection_Interface> conn_ptr,
+			const std::string& response));
+	MOCK_METHOD0(close, void());
+	MOCK_METHOD0(shutdown, void());
+};
+
+#endif
+

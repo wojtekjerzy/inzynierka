@@ -1,0 +1,27 @@
+#ifndef ASIO_FOR_SERVER_H
+#define ASIO_FOR_SERVER_H
+
+#include <Connection/Base_Asio_For_Server_Interface.h>
+
+class Asio_For_Server : public Base_Asio_For_Server_Interface
+{
+public:
+	Asio_For_Server(int port_number);
+	~Asio_For_server() throw() {}
+
+	boost::asio::io_service& get_io_service() override;
+	void run() override;
+	void accept(std::shared_ptr <Base_Asio_For_Connection_Interface> asio_conn_ptr,
+						Base_Server_Interface* server_ptr) override;
+	bool is_open() override;
+
+private:
+	boost::asio::io_service io_service;
+	boost_socket::endpoint endpoint;
+	boost_socket::acceptor acceptor;
+	boost::system::error_code ignored_error;
+};
+
+#endif
+
+

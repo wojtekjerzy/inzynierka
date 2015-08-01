@@ -1,0 +1,24 @@
+#ifndef BASE_CONNECTION_FACTORY_INTERFACE_H
+#define BASE_CONNECTION_FACTORY_INTERFACE_H
+
+#include <Connection/Base_Connection_Interface.h>
+#include <Daemon/Base_Log_Formatter.h>
+#include <Connection/Base_Asio_For_Server_Interface.h>
+#include <Connection/Base_HTTP_Maintainer_Interface.h>
+
+
+class Base_Connection_Factory_Interface
+{
+public:
+	virtual ~Base_Connection_Factory_Interface() = default;
+
+	virtual boost::shared_ptr <Base_Connection_Interface> create_connection(std::shared_ptr <Base_Log_Formatter> logger_pointer_,
+		std::shared_ptr <Base_Parameters_Interface> param_ptr_,
+		std::shared_ptr <Base_Access_Protector_Interface> access_ptr_,
+		std::shared_ptr <Base_Asio_For_Server_Interface> asio_for_serv_,
+		std::shared_ptr <Base_HTTP_Maintainer_Interface> http_maintainer_) = 0;
+};
+
+
+
+#endif
